@@ -1,23 +1,30 @@
-import { MongoClient } from 'mongodb'
+import { Collection, Db, MongoClient } from 'mongodb'
 import { config } from 'dotenv'
+import User from '~/models/schemas/user.schemas'
 config()
 
 const uri = `mongodb+srv://${process.env.DB_USER_NAME}:${process.env.DB_PASSWORD}@tweet.gr5vi.mongodb.net/?retryWrites=true&w=majority&appName=Tweet`
 
 export class DatabaseService {
   private client: MongoClient
+  private db: Db
   constructor() {
     this.client = new MongoClient(uri)
+    this.db = this.client.db(process.env.DB_NAME)
   }
 
   async connect() {
     try {
-      await this.client.connect()
-      await this.client.db('admin').command({ ping: 1 })
+      await this.db.command({ ping: 1 })
       console.log('Pinged your deployment. You successfully connected to MongoDB!')
-    } finally {
-      await this.client.close()
+    } catch (e) {
+      console.log(e)
+      throw e
     }
+  }
+
+  get users(): Collection<User> {
+    return this.db.collection(process.env.USER_COLLECTION as string)
   }
 }
 

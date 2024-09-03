@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { userService } from '~/services/users.services'
 
 export const loginController = (request: Request, response: Response) => {
   const { email, password } = request.body
@@ -7,9 +8,26 @@ export const loginController = (request: Request, response: Response) => {
     response.json({
       message: 'login success'
     })
-  } else {
-    response.status(400).json({
-      message: 'Email or password is correct'
+  }
+
+  return response.status(400).json({
+    error: 'login fail'
+  })
+}
+
+export const registerController = async (request: Request, response: Response) => {
+  const { email, password } = request.body
+
+  try {
+    const result = await userService.register({ email, password })
+    return response.json({
+      result,
+      message: 'Register success'
+    })
+  } catch (error) {
+    return response.status(400).json({
+      error: error,
+      message: 'Register fail'
     })
   }
 }
