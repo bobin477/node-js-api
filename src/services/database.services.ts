@@ -5,7 +5,7 @@ config()
 
 const uri = `mongodb+srv://${process.env.DB_USER_NAME}:${process.env.DB_PASSWORD}@tweet.gr5vi.mongodb.net/?retryWrites=true&w=majority&appName=Tweet`
 
-export class DatabaseService {
+class DatabaseService {
   private client: MongoClient
   private db: Db
   constructor() {

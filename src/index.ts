@@ -1,6 +1,6 @@
 import express from 'express'
 import userRoute from './routes/users.routes'
-import databaseService from '~/services/database.serives'
+import databaseService from '~/services/database.services'
 const app = express()
 const port = 3001
 
