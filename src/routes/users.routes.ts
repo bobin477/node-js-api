@@ -1,25 +1,9 @@
-import { Router } from 'express'
-import {
-  loginController,
-  registerController,
-  logoutController,
-  emailVerifyController,
-  resendVerifyEmailController
-} from '~/controller/users.controller'
-import {
-  accessTokenValidator,
-  emailVerifyTokenValidator,
-  loginValidator,
-  refreshTokenValidator,
-  registerValidator
-} from '~/middlewares/user.middlewares'
-import { wrapRequestHandler } from '~/utils/handlers'
-const userRouter = Router()
+import { Router, Response, Request, NextFunction } from 'express'
+import { loginValidator } from '~/middlewares/users.middlewares'
+import { loginController } from '~/services/users.services'
 
-userRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
-userRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
-userRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
-userRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(emailVerifyController))
-userRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController))
+const usersRoute = Router()
 
-export default userRouter
+usersRoute.post('/login', loginValidator, loginController)
+
+export default usersRoute
